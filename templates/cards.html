@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}  
+  <div class="ui doubling cards">
+    {% for card in card_data %}
+      <div  class="card">
+        <div class="image">          
+          <img  src="{{ url_for('static',filename='img/' + card.card_image) }}" alt="{{ card.card_name}}" />
+        </div>
+        <div class="content">
+          <div class="header">{{ card.card_name }}</div>
+          <div class="ui two buttons">
+            <div>
+              <button id="engAudio" data-id="{{ card.english_concept }}" class="ui basic green button">
+                {{ card.english_concept }}
+              </button>
+            </div>
+            <div> 
+              <button id="hinAudio" data-id="{{ card.hindi_concept }}" class="ui basic blue button">
+                {{ card.hindi_concept }}
+              </button>
+            </div>        
+          </div>  
+        </div>        
+      </div>
+    {% endfor %}  
+  </div>
+{% endblock %}
+
+{% block scripts %} 
+    <script>
+      // Add event listener to English button
+      const englishBtns = document.querySelectorAll('#engAudio')
+      for (let i = 0; i < englishBtns.length; i++) {
+        const engBtn = englishBtns[i];
+        engBtn.addEventListener("click", (e) => {const text = e.target.dataset['id']; audioEng(text,0)});
+      }
+   
+      // Add event listener to Hindi button
+      const hindiBtns = document.querySelectorAll('#hinAudio')
+      for (let i = 0; i < hindiBtns.length; i++) {
+        const hinBtn = hindiBtns[i];
+        hinBtn.addEventListener("click", (e) => {const text = e.target.dataset['id']; audioEng(text,9)});
+      }
+      
+      // Function to generate audio
+      function audioEng(text,value) {
+        let voice = speechSynthesis.getVoices()[value]
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.voice = voice
+        speechSynthesis.speak(utterance);
+      }  
+    </script>
+{% endblock %} 

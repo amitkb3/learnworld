@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}  
+  <div class="ui doubling cards">
+    {% for lesson in lesson_data %}
+      <div data-id="{{ lesson.id }}" class="card">
+        <div class="image">
+          <img id="animals" src="{{ url_for('static',filename='img/' + lesson.lesson_image) }}" alt="{{ lesson.lesson_name}}" />
+        </div>
+        <div class="content">
+          <div class="header">{{ lesson.lesson_name }}</div>
+          <div class="description">
+            {{ lesson.lesson_summary }}
+          </div>
+        </div>
+        <div class="extra content">            
+            <a href="/cards/{{ lesson.id }}"><button class="ui basic green button">Start</button></a>
+        </div>
+      </div>
+    {% endfor %}  
+  </div>
+{% endblock %}
