@@ -50,5 +50,9 @@ def show_card(lesson_id):
   return render_template('cards.html', card_data=card_data)
 
 
+
+
+
+
     
 
