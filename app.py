@@ -1,7 +1,9 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import Form
 
 from config import Config
+from forms import *
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -49,8 +51,14 @@ def show_card(lesson_id):
 
   return render_template('cards.html', card_data=card_data)
 
+# Create Lesson
+# -------------------
 
-
+# Get the Create Lesson Form
+@app.route('/lessons/create', methods=['GET'])
+def create_lesson_form():
+  form = LessonForm()
+  return render_template('forms/new_lesson.html', form=form)
 
 
 
