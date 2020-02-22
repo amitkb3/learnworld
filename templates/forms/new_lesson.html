@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="formwrapper">
-  <h2 class="title">Contact</h2>
-  <form method="POST" action="/">
-      <div class="form-field">{{ form.lesson_name.label }} {{ form.lesson_name(size=20) }}</div>
-      <div class="form-field">{{ form.lesson_image.label }} {{ form.lesson_image }}</div>
-      <div class="form-field">{{ form.lesson_summary.label }} {{ form.lesson_summary }}</div>
-      {{ form.submit }}
+  <form method="POST" action="" class="ui form">    
+    <h2 class="ui header">Create Lesson</h2>
+    <div class='field'>{{ form.lesson_name.label }} {{ form.lesson_name(size=20) }}</div>
+    <div class='field'>{{ form.lesson_image.label }} {{ form.lesson_image }}</div>
+    <div class='field'>{{ form.lesson_summary.label }} {{ form.lesson_summary }}</div>
+    <input class="ui blue button" type="submit" value="Create">
   </form>
-</div>
 {% endblock %}
