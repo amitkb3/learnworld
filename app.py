@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -59,6 +59,34 @@ def show_card(lesson_id):
 def create_lesson_form():
   form = LessonForm()
   return render_template('forms/new_lesson.html', form=form)
+
+# Post handler for Leasson Creation
+@app.route('/lessons/create', methods=['POST'])
+def create_lesson_submission():
+  try:
+    form = LessonForm()
+    lesson_name = form.lesson_name.data
+    lesson_image = form.lesson_image.data
+    lesson_summary = form.lesson_summary.data
+
+    lesson = Lesson(lesson_name=lesson_name,
+    lesson_image=lesson_image,
+    lesson_summary=lesson_summary
+    )
+
+    db.session.add(lesson)
+    db.session.commit()
+    # on successful db insert, flash success
+    flash('Lesson ' + request.form['lesson_name'] + 'was successfully added.')
+  except:
+    db.session.rollback()
+    flash('An error occured. Lesson ' + request.form['lesson_name'] + 'could not be added.')
+  finally:
+    db.session.close()
+  return redirect(url_for('lessons'))
+
+
+
 
 # Create Card
 # -------------------
