@@ -60,6 +60,15 @@ def create_lesson_form():
   form = LessonForm()
   return render_template('forms/new_lesson.html', form=form)
 
+# Create Card
+# -------------------
+
+# Get the Create Card Form
+@app.route('/cards/create', methods=['GET'])
+def create_card_form():
+  form = CardForm()
+  return render_template('forms/new_card.html', form=form)
+
 
 
     
