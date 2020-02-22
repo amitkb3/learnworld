@@ -16,6 +16,7 @@ def healthy():
   return 'Healthy'
 
 @app.route('/')
+@app.route('/index')
 def lessons():
   lesson_data =  [
     {"id": 1,"lesson_name":"Animals","lesson_image":"lion.jpg","lesson_summary":"Learn about animals"},
