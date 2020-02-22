@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+  <form method="POST" action="" class="ui form">
+    <h2 class="ui header">Create Card</h2>
+    <div class="field">{{ form.card_name.label }} {{ form.card_name }}</div>
+    <div class="field">{{ form.card_image.label }} {{ form.card_image }}</div>
+    <div class="field">{{ form.english_concept.label }} {{ form.english_concept }}</div>
+    <div class="field">{{ form.hindi_concept.label }} {{ form.hindi_concept }}</div>
+    <div class="field">{{ form.lesson_id.label }} {{ form.lesson_id }}</div>
+    <input class="ui blue button" type="submit" value="Create">
+  </form>
+{% endblock %}

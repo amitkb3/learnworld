@@ -18,12 +18,12 @@ class LessonForm(FlaskForm):
         u'Lesson Summary', validators=[DataRequired()]
   )
 
-  class CardForm(FlaskForm):
-    card_name = StringField(u'Card Name', validators=[DataRequired()])
-    card_image = SelectField(
-          u'Card Image', validators=[DataRequired()], choices=[(f, f) for f in imagefilenames]
+class CardForm(FlaskForm):
+  card_name = StringField(u'Card Name', validators=[DataRequired()])
+  card_image = SelectField(
+        u'Card Image', validators=[DataRequired()], choices=[(f, f) for f in imagefilenames]
     )
-    english_concept = StringField(u'English Concept', validators=[DataRequired()])
-    hindi_concept = StringField(u'Hindi Summary', validators=[DataRequired()])
-    lesson_id = StringField('Lesson Id', validators=[DataRequired()])
+  english_concept = StringField(u'English Concept', validators=[DataRequired()])
+  hindi_concept = StringField(u'Hindi Summary', validators=[DataRequired()])
+  lesson_id = StringField('Lesson Id', validators=[DataRequired()])
   
