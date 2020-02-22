@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="formwrapper">
+  <h2 class="title">Contact</h2>
+  <form method="POST" action="/">
+      <div class="form-field">{{ form.lesson_name.label }} {{ form.lesson_name(size=20) }}</div>
+      <div class="form-field">{{ form.lesson_image.label }} {{ form.lesson_image }}</div>
+      <div class="form-field">{{ form.lesson_summary.label }} {{ form.lesson_summary }}</div>
+      {{ form.submit }}
+  </form>
+</div>
+{% endblock %}

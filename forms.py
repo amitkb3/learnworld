@@ -1,4 +1,4 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField
 from wtforms.validators import DataRequired, URL
 import os
@@ -7,7 +7,7 @@ import os
 #Image Files
 imagefilenames = os.listdir("static/img")
 
-class LessonForm(Form):
+class LessonForm(FlaskForm):
   lesson_name = StringField(
         u'Lesson Name', validators=[DataRequired()]
   )
@@ -18,20 +18,12 @@ class LessonForm(Form):
         u'Lesson Summary', validators=[DataRequired()]
   )
 
-  class CardForm(Form):
-  card_name = StringField(
-        u'Card Name', validators=[DataRequired()]
-  )
-  card_image = SelectField(
-        u'Card Image', validators=[DataRequired()], choices=[(f, f) for f in imagefilenames]
-  )
-  english_concept = StringField(
-        u'English Concept', validators=[DataRequired()]
-  )
-  hindi_concept = StringField(
-        u'Hindi Summary', validators=[DataRequired()]
-  )
-  lesson_id = StringField(
-        'Lesson Id', validators=[DataRequired()]
+  class CardForm(FlaskForm):
+    card_name = StringField(u'Card Name', validators=[DataRequired()])
+    card_image = SelectField(
+          u'Card Image', validators=[DataRequired()], choices=[(f, f) for f in imagefilenames]
     )
+    english_concept = StringField(u'English Concept', validators=[DataRequired()])
+    hindi_concept = StringField(u'Hindi Summary', validators=[DataRequired()])
+    lesson_id = StringField('Lesson Id', validators=[DataRequired()])
   
