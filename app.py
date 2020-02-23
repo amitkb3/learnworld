@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -24,9 +24,9 @@ def lessons():
     {"id": 3,"lesson_name":"Vegetables","lesson_image":"carrot.jpg","lesson_summary":"Learn about vegetables"},
     {"id": 4,"lesson_name":"Birds","lesson_image":"parrot.jpg","lesson_summary":"Learn about birds"},
     {"id": 5,"lesson_name":"Animals 2","lesson_image":"tiger.jpg","lesson_summary":"Learn more about animals"},    
-     {"id": 6,"lesson_name":"Fruits 2","lesson_image":"mango.jpg","lesson_summary":"Learn More bout Fruits"},
-     {"id": 7,"lesson_name":"Vegetables","lesson_image":"potato.jpg","lesson_summary":"Learn about vegetables"},
-    {"id": 8,"lesson_name":"Birds","lesson_image":"eagle.jpg","lesson_summary":"Learn about birds"}
+     {"id": 6,"lesson_name":"Fruits 2","lesson_image":"mango.jpg","lesson_summary":"Learn more bout Fruits"},
+     {"id": 7,"lesson_name":"Vegetables 2","lesson_image":"potato.jpg","lesson_summary":"Learn more about vegetables"},
+    {"id": 8,"lesson_name":"Birds 2","lesson_image":"eagle.jpg","lesson_summary":"Learn about birds"}
   ]
   return render_template('lessons.html', lesson_data=lesson_data)
 
@@ -78,16 +78,13 @@ def create_lesson_submission():
     db.session.add(lesson)
     db.session.commit()
     # on successful db insert, flash success
-    flash('Lesson ' + request.form['lesson_name'] + 'was successfully added.')
+    flash('Lesson ' + request.form['lesson_name'] + ' was successfully added.')
   except:
     db.session.rollback()
-    flash('An error occured. Lesson ' + request.form['lesson_name'] + 'could not be added.')
+    flash('An error occured. Lesson ' + request.form['lesson_name'] + ' could not be added.')
   finally:
     db.session.close()
   return redirect(url_for('lessons'))
-
-
-
 
 # Create Card
 # -------------------

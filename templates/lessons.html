@@ -19,3 +19,22 @@
     {% endfor %}  
   </div>
 {% endblock %}
+
+{% block scripts %} 
+  <script>
+    // Add event listener to flash message close icon
+    const deleteBtns = document.querySelectorAll('.delete-button')
+    for (let i = 0; i < deleteBtns.length; i++) {
+        const btn = deleteBtns[i];
+        btn.onclick = function (e) {
+          const item = e.target.parentElement;
+          const item2 = item.parentElement
+            console.log(item)
+            console.log(item2)
+            item.remove();
+            item2.remove();
+        }  
+    }
+      
+  </script>
+{% endblock %} 
