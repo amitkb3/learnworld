@@ -30,6 +30,11 @@ def lessons():
   ]
   return render_template('lessons.html', lesson_data=lesson_data)
 
+#Route Handler for Admin Page
+@app.route('/admin')
+def admin():
+  return render_template('admin.html')
+
 # Route handler for card
 @app.route('/cards/<int:lesson_id>')
 def show_card(lesson_id):

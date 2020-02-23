@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Admin Page</h1>
+
+<div class="ui message">
+  <div class="header">
+    Login
+  </div>
+  <p> Kindly login to perfrom any of the below tasks. <br>
+      1. You need <em>Developer</em> Credentials to create or edit a lesson or card. <br>
+      2. <em>Admin</em> Credentials allows create, edit and delete permissions. <br></p>
+
+      <a href="/login"><button class="ui basic green button">Login</button></a>
+</div>
+
+
+<h3 class="ui header">Lessons</h3>
+<a href="/lessons/create"><button class="ui basic green button">Create Lesson</button></a>
+<a href="/lessons/edit"><button class="ui basic green button">Edit Lesson</button></a>
+<div class="ui section divider"></div>
+<h3 class="ui header">Cards</h3>
+<a href="/cards/create"><button class="ui basic green button">Create Card</button></a>
+<a href="/cards/edit"><button class="ui basic green button">Edit Card</button></a>
+{% endblock%}
