@@ -33,22 +33,22 @@ def lessons():
 # Route handler for card
 @app.route('/cards/<int:lesson_id>')
 def show_card(lesson_id):
+  card_data = db.session.query(Card).filter(Card.lesson_id == lesson_id).all()
+  # card_data =  [
+  #   {"id": 1,"card_name":"Lion","card_image":"lion.jpg","english_concept":"lion","hindi_concept":"शेर","lesson_id":1},
+  #   {"id": 2,"card_name":"Zebra","card_image":"zebra.jpg","english_concept":"zebra","hindi_concept":"ज़ेबरा","lesson_id":1},
+  #   {"id": 3,"card_name":"Monkey","card_image":"monkey.jpg","english_concept":"monkey","hindi_concept":"बंदर","lesson_id":1},
+  #   {"id": 4,"card_name":"Cat","card_image":"cat.jpg","english_concept":"cat","hindi_concept":"बिल्ली","lesson_id":1},
+  #   {"id": 5,"card_name":"Donkey","card_image":"donkey.jpg","english_concept":"donkey","hindi_concept":"गधा","lesson_id":1}
+  # ]
 
-  card_data =  [
-    {"id": 1,"card_name":"Lion","card_image":"lion.jpg","english_concept":"lion","hindi_concept":"शेर","lesson_id":1},
-    {"id": 2,"card_name":"Zebra","card_image":"zebra.jpg","english_concept":"zebra","hindi_concept":"ज़ेबरा","lesson_id":1},
-    {"id": 3,"card_name":"Monkey","card_image":"monkey.jpg","english_concept":"monkey","hindi_concept":"बंदर","lesson_id":1},
-    {"id": 4,"card_name":"Cat","card_image":"cat.jpg","english_concept":"cat","hindi_concept":"बिल्ली","lesson_id":1},
-    {"id": 5,"card_name":"Donkey","card_image":"donkey.jpg","english_concept":"donkey","hindi_concept":"गधा","lesson_id":1}
-  ]
-
-  card_data1 =  [
-    {"id": 21,"card_name":"Tiger","card_image":"tiger.jpg","english_concept":"tiger","hindi_concept":"बाघ","lesson_id":5},
-    {"id": 22,"card_name":"Horse","card_image":"horse.jpg","english_concept":"horse","hindi_concept":"घोड़ा","lesson_id":5},
-    {"id": 23,"card_name":"Dog","card_image":"dog.jpg","english_concept":"dog","hindi_concept":"कुत्ता","lesson_id":5},
-    {"id": 24,"card_name":"Elephant","card_image":"elephant.jpg","english_concept":"elephant","hindi_concept":"हाथी","lesson_id":5},
-    {"id": 25,"card_name":"Panda","card_image":"panda.jpg","english_concept":"panda","hindi_concept":"पांडा","lesson_id":5}
-  ]
+  # card_data1 =  [
+  #   {"id": 21,"card_name":"Tiger","card_image":"tiger.jpg","english_concept":"tiger","hindi_concept":"बाघ","lesson_id":5},
+  #   {"id": 22,"card_name":"Horse","card_image":"horse.jpg","english_concept":"horse","hindi_concept":"घोड़ा","lesson_id":5},
+  #   {"id": 23,"card_name":"Dog","card_image":"dog.jpg","english_concept":"dog","hindi_concept":"कुत्ता","lesson_id":5},
+  #   {"id": 24,"card_name":"Elephant","card_image":"elephant.jpg","english_concept":"elephant","hindi_concept":"हाथी","lesson_id":5},
+  #   {"id": 25,"card_name":"Panda","card_image":"panda.jpg","english_concept":"panda","hindi_concept":"पांडा","lesson_id":5}
+  # ]
 
   return render_template('cards.html', card_data=card_data)
 
@@ -94,6 +94,36 @@ def create_lesson_submission():
 def create_card_form():
   form = CardForm()
   return render_template('forms/new_card.html', form=form)
+
+# Post handler for Card Creation
+@app.route('/cards/create', methods=['POST'])
+def create_card_submission():
+  try:
+    form = CardForm()
+    
+    card_name = form.card_name.data
+    card_image = form.card_image.data
+    english_concept = form.english_concept.data
+    hindi_concept = form.hindi_concept.data
+    lesson_id = form.lesson_id.data
+      
+    card = Card(card_name=card_name,
+    card_image=card_image,
+    english_concept=english_concept,
+    hindi_concept=hindi_concept,
+    lesson_id=lesson_id
+    )
+
+    db.session.add(card)
+    db.session.commit()
+    # on successful db insert, flash success
+    flash('Card ' + request.form['card_name'] + ' was successfully added.')
+  except:
+    db.session.rollback()
+    flash('An error occured. Card ' + request.form['card_name'] + ' could not be added.')
+  finally:
+    db.session.close()
+  return redirect(url_for('lessons'))
 
 
 

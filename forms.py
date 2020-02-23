@@ -24,6 +24,6 @@ class CardForm(FlaskForm):
         u'Card Image', validators=[DataRequired()], choices=[(f, f) for f in imagefilenames]
     )
   english_concept = StringField(u'English Concept', validators=[DataRequired()])
-  hindi_concept = StringField(u'Hindi Summary', validators=[DataRequired()])
+  hindi_concept = StringField(u'Hindi Concept', validators=[DataRequired()])
   lesson_id = StringField('Lesson Id', validators=[DataRequired()])
   
