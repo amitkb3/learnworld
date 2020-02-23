@@ -8,10 +8,12 @@
   </head>
   <body>
     <div class="ui container">
-      <div>
-        LearnWorld:
-        <a href="/index">Lessons</a>
-        <a href="/admin">Admin</a>
+      <div class="ui menu">
+        <div class="header item">
+          LearnWorld          
+        </div>       
+        <a class="item" href="/index">Lessons</a>
+        <a class="item" href="/admin">Admin</a>       
       </div>
       <hr>
       {% with messages = get_flashed_messages() %}
