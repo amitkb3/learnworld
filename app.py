@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, abort
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -90,6 +90,30 @@ def create_lesson_submission():
   finally:
     db.session.close()
   return redirect(url_for('lessons'))
+
+# Edit Lesson
+
+# reroute direct link to admin page
+@app.route('/lessons/edit', methods=['GET'])
+def lessson_edit_direct():
+  return render_template('admin.html') 
+
+# reroute to edit page for that lesson
+@app.route('/lessons/edit', methods=['POST'])
+def lessson_edit():
+  try:
+    lesson_id = request.form['lesson_id']
+    lesson = db.session.query(Lesson).filter(Lesson.id == lesson_id).one_or_none()
+    if lesson is None:
+     abort(404)
+    form = LessonForm()
+    # set active place holders
+    form.lesson_name.process_data(lesson.lesson_name)
+    form.lesson_image.process_data(lesson.lesson_image)
+    form.lesson_summary.process_data(lesson.lesson_summary)
+    return render_template('forms/edit_lesson.html', form=form, lesson=lesson)
+  except Exception:
+    abort(422)
 
 # Create Card
 # -------------------

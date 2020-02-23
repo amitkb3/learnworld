@@ -16,8 +16,24 @@
 
 
 <h3 class="ui header">Lessons</h3>
+
+<h5 class="ui header">Create New Lesson</h5>
 <a href="/lessons/create"><button class="ui basic green button">Create Lesson</button></a>
-<a href="/lessons/edit"><button class="ui basic green button">Edit Lesson</button></a>
+
+<!-- tip: https://stackoverflow.com/questions/41027382/passing-a-variable-from-a-form-input-to-a-flask-url -->
+<div class="ui horizontal divider"></div>
+<h5 class="ui header">Edit Lesson</h5>
+<form action="{{ url_for('lessson_edit') }}" method="POST" class="ui form">
+  <input type="text" class="field" placeholder="lesson id" name="lesson_id"></input> 
+  <br>
+  <input class="ui teal button" type="submit" value="Edit Lesson">
+</form>
+
+
+  
+
+
+<!-- <a href="/lessons/edit"><button class="ui basic green button">Edit Lesson</button></a> -->
 <div class="ui section divider"></div>
 <h3 class="ui header">Cards</h3>
 <a href="/cards/create"><button class="ui basic green button">Create Card</button></a>

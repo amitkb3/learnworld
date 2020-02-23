@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+  <form method="POST" action="/lessons/{{ lesson.id }}/edit" class="ui form">    
+    <h2 class="ui header">Edit Lesson <em>{{ lesson.lesson_name}}</em></h2>
+    <div class='field'>{{ form.lesson_name.label }} {{ form.lesson_name(placeholder=lesson.lesson_name,  autofocus = true) }}</div>
+    <div class='field'>{{ form.lesson_image.label }} {{ form.lesson_image(placeholder=lesson.lesson_image,  autofocus = true) }}</div>
+    <div class='field'>{{ form.lesson_summary.label }} {{ form.lesson_summary(placeholder=lesson.lesson_summary,  autofocus = true) }}</div>
+    <input class="ui blue button" type="submit" value="Edit Lesson">
+  </form>
+{% endblock %}
