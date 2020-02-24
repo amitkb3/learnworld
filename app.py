@@ -276,7 +276,24 @@ def card_edit_submission(card_id):
     db.session.close()
   return redirect(url_for('lessons'))
   
-
+# route handler for deleting a given card
+@app.route('/cards/delete', methods=['POST'])
+def card_delete():
+  try:
+    card_id = request.form['card_id']
+    card = db.session.query(Card).filter(Card.id == card_id).one_or_none()
+    if card is None:
+     abort(404)    
+    db.session.delete(card)
+    db.session.commit()
+    # on successful db delete, flash success
+    flash('Card ' + card_id + ' was successfully deleted')    
+  except:
+    db.session.rollback()
+    flash('An error occured. Card ' + card_id + ' could not be deleted')
+  finally:
+    db.session.close()
+  return redirect(url_for('lessons'))
 
     
 
