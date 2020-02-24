@@ -18,16 +18,17 @@ def healthy():
 @app.route('/')
 @app.route('/index')
 def lessons():
-  lesson_data =  [
-    {"id": 1,"lesson_name":"Animals","lesson_image":"lion.jpg","lesson_summary":"Learn about animals"},
-    {"id": 2,"lesson_name":"Fruits","lesson_image":"watermelon.jpg","lesson_summary":"Learn about fruits"},   
-    {"id": 3,"lesson_name":"Vegetables","lesson_image":"carrot.jpg","lesson_summary":"Learn about vegetables"},
-    {"id": 4,"lesson_name":"Birds","lesson_image":"parrot.jpg","lesson_summary":"Learn about birds"},
-    {"id": 5,"lesson_name":"Animals 2","lesson_image":"tiger.jpg","lesson_summary":"Learn more about animals"},    
-     {"id": 6,"lesson_name":"Fruits 2","lesson_image":"mango.jpg","lesson_summary":"Learn more bout Fruits"},
-     {"id": 7,"lesson_name":"Vegetables 2","lesson_image":"potato.jpg","lesson_summary":"Learn more about vegetables"},
-    {"id": 8,"lesson_name":"Birds 2","lesson_image":"eagle.jpg","lesson_summary":"Learn about birds"}
-  ]
+  lesson_data = db.session.query(Lesson).all()
+  # lesson_data =  [
+  #   {"id": 1,"lesson_name":"Animals","lesson_image":"lion.jpg","lesson_summary":"Learn about animals"},
+  #   {"id": 2,"lesson_name":"Fruits","lesson_image":"watermelon.jpg","lesson_summary":"Learn about fruits"},   
+  #   {"id": 3,"lesson_name":"Vegetables","lesson_image":"carrot.jpg","lesson_summary":"Learn about vegetables"},
+  #   {"id": 4,"lesson_name":"Birds","lesson_image":"parrot.jpg","lesson_summary":"Learn about birds"},
+  #   {"id": 5,"lesson_name":"Animals 2","lesson_image":"tiger.jpg","lesson_summary":"Learn more about animals"},    
+  #    {"id": 6,"lesson_name":"Fruits 2","lesson_image":"mango.jpg","lesson_summary":"Learn more bout Fruits"},
+  #    {"id": 7,"lesson_name":"Vegetables 2","lesson_image":"potato.jpg","lesson_summary":"Learn more about vegetables"},
+  #   {"id": 8,"lesson_name":"Birds 2","lesson_image":"eagle.jpg","lesson_summary":"Learn about birds"}
+  # ]
   return render_template('lessons.html', lesson_data=lesson_data)
 
 #Route Handler for Admin Page
@@ -66,7 +67,7 @@ def create_lesson_form():
   form = LessonForm()
   return render_template('forms/new_lesson.html', form=form)
 
-# Post handler for Leasson Creation
+# Post handler for Lesson Creation
 @app.route('/lessons/create', methods=['POST'])
 def create_lesson_submission():
   try:
@@ -114,6 +115,61 @@ def lessson_edit():
     return render_template('forms/edit_lesson.html', form=form, lesson=lesson)
   except Exception:
     abort(422)
+
+# direct edit lesson get route
+@app.route('/lessons/<int:lesson_id>/edit', methods=['GET'])
+def lessson_edit_get(lesson_id):
+  try:
+    lesson = db.session.query(Lesson).filter(Lesson.id == lesson_id).one_or_none()
+    if lesson is None:
+     abort(404)
+    form = LessonForm()
+    # set active place holders
+    form.lesson_name.process_data(lesson.lesson_name)
+    form.lesson_image.process_data(lesson.lesson_image)
+    form.lesson_summary.process_data(lesson.lesson_summary)
+    return render_template('forms/edit_lesson.html', form=form, lesson=lesson)
+  except Exception:
+    abort(422)
+  
+# Edit Lesson POST handler
+@app.route('/lessons/<int:lesson_id>/edit', methods=['POST'])
+def lessson_edit_submission(lesson_id):
+  try:
+    form = LessonForm()
+    lesson = db.session.query(Lesson).filter(Lesson.id == lesson_id).first()
+    # Updating values from form input    
+    lesson.lesson_name = form.lesson_name.data
+    lesson.lesson_image = form.lesson_image.data
+    lesson.lesson_summary = form.lesson_summary.data
+    db.session.commit()
+    # on successful db insert, flash success
+    flash('Lesson ' + request.form['lesson_name'] + ' was successfully updated!')
+  except:
+    db.session.rollback()
+    flash('An error occured. Lesson ' + request.form['lesson_name'] + ' could not be updated!')
+  finally:
+    db.session.close()
+  return redirect(url_for('lessons'))
+
+# route handler for deleting a given Lesson
+@app.route('/lessons/delete', methods=['POST'])
+def lessson_delete():
+  try:
+    lesson_id = request.form['lesson_id']
+    lesson = db.session.query(Lesson).filter(Lesson.id == lesson_id).one_or_none()
+    if lesson is None:
+     abort(404)    
+    db.session.delete(lesson)
+    db.session.commit()
+    # on successful db delete, flash success
+    flash('Lesson ' + lesson_id + ' was successfully deleted')    
+  except:
+    db.session.rollback()
+    flash('An error occured. Lesson ' + lesson_id + ' could not be deleted')
+  finally:
+    db.session.close()
+  return redirect(url_for('lessons'))
 
 # Create Card
 # -------------------
