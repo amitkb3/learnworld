@@ -29,6 +29,14 @@
   <input class="ui teal button" type="submit" value="Edit Lesson">
 </form>
 
+<div class="ui horizontal divider"></div>
+<h5 class="ui header">Delete Lesson</h5>
+<form action="{{ url_for('lessson_delete') }}" method="POST" class="ui form">
+  <input type="text" class="field" placeholder="lesson id" name="lesson_id"></input> 
+  <br>
+  <input class="ui red button" type="submit" value="Delete Lesson">
+</form>
+
 
   
 
