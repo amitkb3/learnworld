@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+  <form method="POST" action="/cards/{{ card.id }}/edit" class="ui form">
+    <h2 class="ui header">Edit Card <em>{{ card.card_name }}</em></h2>
+    <div class="field">{{ form.card_name.label }} {{ form.card_name(placeholder=card.card_name,  autofocus = true) }}</div>
+    <div class="field">{{ form.card_image.label }} {{ form.card_image(placeholder=card.card_image,  autofocus = true) }}</div>
+    <div class="field">{{ form.english_concept.label }} {{ form.english_concept(placeholder=card.english_concept,  autofocus = true) }}</div>
+    <div class="field">{{ form.hindi_concept.label }} {{ form.hindi_concept(placeholder=card.hindi_concept,  autofocus = true) }}</div>
+    <div class="field">{{ form.lesson_id.label }} {{ form.lesson_id(placeholder=card.lesson_id,  autofocus = true) }}</div>
+    <input class="ui blue button" type="submit" value="Edit Card">
+  </form>
+{% endblock %}

@@ -24,7 +24,7 @@
 <div class="ui horizontal divider"></div>
 <h5 class="ui header">Edit Lesson</h5>
 <form action="{{ url_for('lessson_edit') }}" method="POST" class="ui form">
-  <input type="text" class="field" placeholder="lesson id" name="lesson_id"></input> 
+  <input type="text" class="field" placeholder="Lesson id" name="lesson_id"></input> 
   <br>
   <input class="ui teal button" type="submit" value="Edit Lesson">
 </form>
@@ -32,18 +32,31 @@
 <div class="ui horizontal divider"></div>
 <h5 class="ui header">Delete Lesson</h5>
 <form action="{{ url_for('lessson_delete') }}" method="POST" class="ui form">
-  <input type="text" class="field" placeholder="lesson id" name="lesson_id"></input> 
+  <input type="text" class="field" placeholder="Lesson id" name="lesson_id"></input> 
   <br>
   <input class="ui red button" type="submit" value="Delete Lesson">
 </form>
 
 
-  
 
-
-<!-- <a href="/lessons/edit"><button class="ui basic green button">Edit Lesson</button></a> -->
 <div class="ui section divider"></div>
 <h3 class="ui header">Cards</h3>
 <a href="/cards/create"><button class="ui basic green button">Create Card</button></a>
-<a href="/cards/edit"><button class="ui basic green button">Edit Card</button></a>
+
+<div class="ui horizontal divider"></div>
+<h5 class="ui header">Edit Card</h5>
+<form action="{{ url_for('card_edit') }}" method="POST" class="ui form">
+  <input type="text" class="field" placeholder="Card id" name="card_id"></input> 
+  <br>
+  <input class="ui teal button" type="submit" value="Edit Card">
+</form>
+
+<div class="ui horizontal divider"></div>
+<h5 class="ui header">Delete Card</h5>
+<form action="{{ url_for('card_delete') }}" method="POST" class="ui form">
+  <input type="text" class="field" placeholder="Card id" name="card_id"></input> 
+  <br>
+  <input class="ui red button" type="submit" value="Delete Card">
+</form>
 {% endblock%}
+

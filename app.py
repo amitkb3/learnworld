@@ -210,6 +210,72 @@ def create_card_submission():
     db.session.close()
   return redirect(url_for('lessons'))
 
+# Edit Card
+
+# reroute direct link to admin page
+@app.route('/cards/edit', methods=['GET'])
+def card_edit_direct():
+  return render_template('admin.html') 
+
+# reroute to edit page for that lesson
+@app.route('/cards/edit', methods=['POST'])
+def card_edit():
+  try:
+    card_id = request.form['card_id']
+    card = db.session.query(Card).filter(Card.id == card_id).one_or_none()
+    if card is None:
+     abort(404)
+    form = CardForm()
+    # set active place holders
+    form.card_name.process_data(card.card_name)
+    form.card_image.process_data(card.card_image)
+    form.english_concept.process_data(card.english_concept)
+    form.hindi_concept.process_data(card.hindi_concept)
+    form.lesson_id.process_data(card.lesson_id)    
+    return render_template('forms/edit_card.html', form=form, card=card)
+  except Exception:
+    abort(422)
+
+# direct edit card get route
+@app.route('/cards/<int:card_id>/edit', methods=['GET'])
+def card_edit_get(card_id):
+  try:
+    card = db.session.query(Card).filter(Card.id == card_id).one_or_none()
+    if card is None:
+     abort(404)
+    form = CardForm()
+    # set active place holders
+    form.card_name.process_data(card.card_name)
+    form.card_image.process_data(card.card_image)
+    form.english_concept.process_data(card.english_concept)
+    form.hindi_concept.process_data(card.hindi_concept)
+    form.lesson_id.process_data(card.lesson_id)    
+    return render_template('forms/edit_card.html', form=form, card=card)
+  except Exception:
+    abort(422)
+
+# Edit Card POST handler
+@app.route('/cards/<int:card_id>/edit', methods=['POST'])
+def card_edit_submission(card_id):
+  try:
+    form = CardForm()
+    card = db.session.query(Card).filter(Card.id == card_id).first()
+    # Updating values from form input    
+    card.card_name = form.card_name.data
+    card.card_image = form.card_image.data
+    card.english_concept = form.english_concept.data
+    card.hindi_concept = form.hindi_concept.data
+    card.lesson_id = form.lesson_id.data
+    db.session.commit()
+    # on successful db insert, flash success
+    flash('Card ' + request.form['card_name'] + ' was successfully updated!')
+  except:
+    db.session.rollback()
+    flash('An error occured. Card ' + request.form['card_name'] + ' could not be updated!')
+  finally:
+    db.session.close()
+  return redirect(url_for('lessons'))
+  
 
 
     
