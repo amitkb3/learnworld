@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-
+from werkzeug.exceptions import HTTPException
 from config import Config
 from forms import *
 
@@ -21,6 +21,10 @@ def after_request(response):
 
 @app.route('/healthy')
 def healthy():
+  """
+  Route to check health of app
+  :returns a text message 'healthy'
+  """
   return 'Healthy'
 
 @app.route('/')
@@ -50,12 +54,33 @@ def lessons():
 #Route Handler for Admin Page
 @app.route('/admin')
 def admin():
+  """
+  Renders admin page where user can login
+  and perform Create, Edit and Delete operations
+  on Lessons and Cards
+  :returns 
+  """
   return render_template('admin.html')
 
 # Route handler for card
 @app.route('/cards/<int:lesson_id>')
 def show_card(lesson_id):
+  """
+  Creates a list of all cards for given lesson id
+  :returns a list of cards
+  """
+  # Check if lesson exists
+  lesson = db.session.query(Lesson).filter(Lesson.id == lesson_id).one_or_none()    
+  if lesson is None:
+    flash('Lesson Not Found') 
+    return redirect(url_for('lessons'))     
   card_data = db.session.query(Card).filter(Card.lesson_id == lesson_id).all()
+  # Check if the requested lesson has cards
+  if len(card_data) == 0:
+    flash('No Cards Available for the requested Lesson.') 
+    return redirect(url_for('lessons'))    
+  return render_template('cards.html', card_data=card_data)
+  
   # card_data =  [
   #   {"id": 1,"card_name":"Lion","card_image":"lion.jpg","english_concept":"lion","hindi_concept":"शेर","lesson_id":1},
   #   {"id": 2,"card_name":"Zebra","card_image":"zebra.jpg","english_concept":"zebra","hindi_concept":"ज़ेबरा","lesson_id":1},
@@ -72,12 +97,14 @@ def show_card(lesson_id):
   #   {"id": 25,"card_name":"Panda","card_image":"panda.jpg","english_concept":"panda","hindi_concept":"पांडा","lesson_id":5}
   # ]
 
-  return render_template('cards.html', card_data=card_data)
 
 # Create Lesson
 # -------------------
 
 # Get the Create Lesson Form
+"""
+  Renders New Lesson Form
+"""
 @app.route('/lessons/create', methods=['GET'])
 def create_lesson_form():
   form = LessonForm()
@@ -86,6 +113,10 @@ def create_lesson_form():
 # Post handler for Lesson Creation
 @app.route('/lessons/create', methods=['POST'])
 def create_lesson_submission():
+  """
+    Add new lesson to database
+    :return renders the lessons page
+  """
   try:
     form = LessonForm()
     lesson_name = form.lesson_name.data
@@ -113,11 +144,20 @@ def create_lesson_submission():
 # reroute direct link to admin page
 @app.route('/lessons/edit', methods=['GET'])
 def lessson_edit_direct():
+  """
+    Redirects back to admin page
+    which will ask for lesson id for editing    
+  """
   return render_template('admin.html') 
 
 # reroute to edit page for that lesson
 @app.route('/lessons/edit', methods=['POST'])
 def lessson_edit():
+  """
+    Gathers lesson info for lesson id to be edited
+    and renders Edit Leson form
+    :return requested lesson data for editing
+  """
   try:
     lesson_id = request.form['lesson_id']
     lesson = db.session.query(Lesson).filter(Lesson.id == lesson_id).one_or_none()
@@ -135,6 +175,11 @@ def lessson_edit():
 # direct edit lesson get route
 @app.route('/lessons/<int:lesson_id>/edit', methods=['GET'])
 def lessson_edit_get(lesson_id):
+  """
+    Gathers lesson info for lesson id to be edited
+    and renders Edit Leson form
+    :return requested lesson data for editing
+  """
   try:
     lesson = db.session.query(Lesson).filter(Lesson.id == lesson_id).one_or_none()
     if lesson is None:
@@ -151,6 +196,10 @@ def lessson_edit_get(lesson_id):
 # Edit Lesson POST handler
 @app.route('/lessons/<int:lesson_id>/edit', methods=['POST'])
 def lessson_edit_submission(lesson_id):
+  """
+    Add edited lesson to database
+    :return renders the lessons page
+  """
   try:
     form = LessonForm()
     lesson = db.session.query(Lesson).filter(Lesson.id == lesson_id).first()
@@ -171,6 +220,10 @@ def lessson_edit_submission(lesson_id):
 # route handler for deleting a given Lesson
 @app.route('/lessons/delete', methods=['POST'])
 def lessson_delete():
+  """
+    Deletes lesson from database
+    :return renders the lessons page
+  """
   try:
     lesson_id = request.form['lesson_id']
     lesson = db.session.query(Lesson).filter(Lesson.id == lesson_id).one_or_none()
@@ -193,12 +246,19 @@ def lessson_delete():
 # Get the Create Card Form
 @app.route('/cards/create', methods=['GET'])
 def create_card_form():
+  """
+  Renders New Card Form
+  """
   form = CardForm()
   return render_template('forms/new_card.html', form=form)
 
 # Post handler for Card Creation
 @app.route('/cards/create', methods=['POST'])
 def create_card_submission():
+  """
+    Add new lesson to database
+    :return renders the lessons page
+  """
   try:
     form = CardForm()
     
@@ -231,11 +291,20 @@ def create_card_submission():
 # reroute direct link to admin page
 @app.route('/cards/edit', methods=['GET'])
 def card_edit_direct():
+  """
+    Redirects back to admin page
+    which will ask for card id for editing    
+  """
   return render_template('admin.html') 
 
-# reroute to edit page for that lesson
+# reroute to edit page for that card
 @app.route('/cards/edit', methods=['POST'])
 def card_edit():
+  """
+    Gathers card info for card id to be edited
+    and renders Edit Card form
+    :return requested card data for editing
+  """
   try:
     card_id = request.form['card_id']
     card = db.session.query(Card).filter(Card.id == card_id).one_or_none()
@@ -255,6 +324,11 @@ def card_edit():
 # direct edit card get route
 @app.route('/cards/<int:card_id>/edit', methods=['GET'])
 def card_edit_get(card_id):
+  """
+    Gathers card info for card id to be edited
+    and renders Edit Card form
+    :return requested card data for editing
+  """
   try:
     card = db.session.query(Card).filter(Card.id == card_id).one_or_none()
     if card is None:
@@ -273,6 +347,10 @@ def card_edit_get(card_id):
 # Edit Card POST handler
 @app.route('/cards/<int:card_id>/edit', methods=['POST'])
 def card_edit_submission(card_id):
+  """
+    Add edited card to database
+    :return renders the lessons page
+  """
   try:
     form = CardForm()
     card = db.session.query(Card).filter(Card.id == card_id).first()
@@ -295,6 +373,10 @@ def card_edit_submission(card_id):
 # route handler for deleting a given card
 @app.route('/cards/delete', methods=['POST'])
 def card_delete():
+  """
+    Deletes lesson from database
+    :return renders the lessons page
+  """
   try:
     card_id = request.form['card_id']
     card = db.session.query(Card).filter(Card.id == card_id).one_or_none()
@@ -311,5 +393,30 @@ def card_delete():
     db.session.close()
   return redirect(url_for('lessons'))
 
-    
+# Error Handler
+@app.errorhandler(HTTPException)
+def http_exception_handler(error):
+  """
+  HTTP error handler for all endpoints
+  :param error: HTTPException containing code and description
+  :return: error: HTTP status code, message: Error description
+  """
+  return jsonify({
+      'success': False,
+      'error': error.code,
+      'message': error.description
+  }), error.code
 
+@app.errorhandler(Exception)
+def exception_handler(error):
+  """
+  Generic error handler for all endpoints
+  :param error: Any exception
+  :return: error: HTTP status code, message: Error description
+  """
+  return jsonify({
+      'success': False,
+      'error': 500,
+      'message': f'Something went wrong: {error}'
+  }), 500
+  
