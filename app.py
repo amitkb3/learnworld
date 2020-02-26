@@ -1,15 +1,23 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, abort
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_cors import CORS
 
 from config import Config
 from forms import *
 
 app = Flask(__name__)
 app.config.from_object(Config)
+CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
 
 from models import Lesson, Card
+
+# CORS Headers
+@app.after_request
+def after_request(response):
+  response.headers.add('Access-Control-Allow-Headers','Content-Type,Authorization,true')
+  response.headers.add('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS')
+  return response
 
 @app.route('/healthy')
 def healthy():
@@ -18,7 +26,15 @@ def healthy():
 @app.route('/')
 @app.route('/index')
 def lessons():
-  lesson_data = db.session.query(Lesson).all()
+  """
+  Creates a list of all lessons
+  :returns a list of lesson
+  """
+  try:
+    lesson_data = db.session.query(Lesson).all()
+    return render_template('lessons.html', lesson_data=lesson_data)
+  except:
+    abort(422)
   # lesson_data =  [
   #   {"id": 1,"lesson_name":"Animals","lesson_image":"lion.jpg","lesson_summary":"Learn about animals"},
   #   {"id": 2,"lesson_name":"Fruits","lesson_image":"watermelon.jpg","lesson_summary":"Learn about fruits"},   
@@ -29,7 +45,7 @@ def lessons():
   #    {"id": 7,"lesson_name":"Vegetables 2","lesson_image":"potato.jpg","lesson_summary":"Learn more about vegetables"},
   #   {"id": 8,"lesson_name":"Birds 2","lesson_image":"eagle.jpg","lesson_summary":"Learn about birds"}
   # ]
-  return render_template('lessons.html', lesson_data=lesson_data)
+  
 
 #Route Handler for Admin Page
 @app.route('/admin')
