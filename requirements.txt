@@ -5,3 +5,5 @@ Flask-Script
 psycopg2-binary
 Flask-WTF
 Flask-Cors
+pycodestyle
+autopep8
