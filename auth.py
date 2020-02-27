@@ -5,9 +5,9 @@ from jose import jwt
 from urllib.request import urlopen
 
 
-AUTH0_DOMAIN = ''
+AUTH0_DOMAIN = 'amitkb3.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = ''
+API_AUDIENCE = 'learn'
 
 # AuthError Exception
 '''

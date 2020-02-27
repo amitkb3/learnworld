@@ -3,7 +3,54 @@ LearnWorld is app which enables children to learn and pronounce concepts in Hind
 
 The LearnWorld API is app which enables children to learn and pronounce concepts in Hindi and English.
 This api is responsible for showing lessons and associated cards for learning. Also checks permissions and provides CRUD capabilities for Lesson and Card Models.
+
+## Motivation
+
+This is my capstone project for the Udacity FSWD nanodegree.
+
 ## Getting Started
+
+## Authentication
+
+The API has three roles:
+
+1. Public
+
+ - Can access lessons and cards without authentications
+
+ ```
+ No authentication required
+ permissions: `get:lessons`,`get:cards`
+ ```
+
+2. Developer
+
+Can create and edit lessons and cards but cannot delete them.
+
+```
+email: developer@learnworld.com
+password: developer@learnworld.com1
+permissions: `get:lessons`,`get:cards`,`post:lessons`,`post:cards`,`patch:lessons`,`patch:cards`
+```
+
+3. Admin
+
+Can perform all CURD operations.
+
+```
+email: admin@learnworld.com
+password: admin@learnworld.com1
+permissions: `get:lessons`,`get:cards`,`post:lessons`,`post:cards`,`patch:lessons`,`patch:cards`,`delete:lessons`,`delete:cards`
+```
+
+3. Producer
+
+```
+email: producer@casting.com
+password: producer@casting.com1
+```
+
+The Auth0 domain and api audience can be found in `setup.sh`.
 
 ### Installing Dependencies
 
