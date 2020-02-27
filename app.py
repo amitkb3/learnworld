@@ -1,16 +1,17 @@
+from flask import Flask, render_template, request
+from flask import redirect, url_for, jsonify, flash, abort
 from forms import *
 from config import Config
 from werkzeug.exceptions import HTTPException
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from models import Lesson, Card
-from flask import Flask, render_template, request,
-redirect, url_for, jsonify, flash, abort
 
 app = Flask(__name__)
 app.config.from_object(Config)
 CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
+
+from models import Lesson, Card
 
 # CORS Headers
 @app.after_request

@@ -7,3 +7,6 @@ Flask-WTF
 Flask-Cors
 pycodestyle
 autopep8
+python-jose
+authlib
+six
